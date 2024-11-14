@@ -3,6 +3,8 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = `${process.env.REACT_APP_API_URL}`;
+
 // Acción para obtener los materiales según el grado del estudiante
 export const fetchMaterials = createAsyncThunk(
   'materiales/fetchMaterials',
@@ -15,7 +17,7 @@ export const fetchMaterials = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `http://localhost:3001/api/materiales/grado/${gradoId}`,
+        `${API_URL}/materiales/grado/${gradoId}`,
         config
       );
       return {
