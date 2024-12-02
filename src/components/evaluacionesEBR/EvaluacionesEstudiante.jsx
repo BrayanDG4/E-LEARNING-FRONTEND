@@ -14,6 +14,10 @@ import {
   FormLabel,
   Select,
   Text,
+  Heading,
+  Divider,
+  Badge,
+  VStack,
 } from '@chakra-ui/react';
 
 export const EvaluacionesEstudiante = () => {
@@ -41,10 +45,6 @@ export const EvaluacionesEstudiante = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (evaluacionSeleccionada) {
-      console.log(
-        'ID de la evaluación seleccionada:',
-        evaluacionSeleccionada._id
-      ); // <--- Verifica este valor
       dispatch(
         submitRespuestas({
           evaluacionId: evaluacionSeleccionada._id,
@@ -53,9 +53,6 @@ export const EvaluacionesEstudiante = () => {
       )
         .unwrap()
         .then(res => {
-          // Mostrar toda la respuesta del servidor
-          console.log('Respuesta del servidor:', res);
-          // Guardar retroalimentación y puntaje recibido del servidor
           setRetroalimentacion(res);
         })
         .catch(error => {
@@ -75,16 +72,18 @@ export const EvaluacionesEstudiante = () => {
     );
 
   return (
-    <Box p={4}>
-      <Text fontSize="2xl" fontWeight="bold" mb={4}>
+    <Box p={6} maxW="6xl" mx="auto">
+      <Heading as="h1" size="xl" mb={6} textAlign="center" color="teal.600">
         Evaluaciones Interactivas
-      </Text>
+      </Heading>
 
-      <Stack direction="row" spacing={4} mb={4}>
+      {/* Filtros */}
+      <VStack spacing={4} mb={6} align="stretch">
         <FormControl>
           <FormLabel>Filtrar por Asignatura</FormLabel>
           <Select
             placeholder="Selecciona Asignatura"
+            bg="white"
             onChange={e => setFiltroAsignatura(e.target.value)}
           >
             {[...new Set(evaluaciones.map(e => e.grado.nombre))].map(
@@ -101,6 +100,7 @@ export const EvaluacionesEstudiante = () => {
           <FormLabel>Filtrar por Periodo</FormLabel>
           <Select
             placeholder="Selecciona Periodo"
+            bg="white"
             onChange={e => setFiltroPeriodo(e.target.value)}
           >
             {[...new Set(evaluaciones.map(e => e.periodo))].map(periodo => (
@@ -110,59 +110,86 @@ export const EvaluacionesEstudiante = () => {
             ))}
           </Select>
         </FormControl>
-      </Stack>
+      </VStack>
+
+      <Divider my={4} />
 
       {/* Listado de evaluaciones */}
-      <Text fontSize="lg" fontWeight="bold" mb={2}>
+      <Heading as="h2" size="lg" mb={4} color="teal.500">
         Evaluaciones Disponibles
-      </Text>
-      {evaluacionesFiltradas.length > 0 ? (
-        evaluacionesFiltradas.map(evaluacion => (
-          <Box
-            key={evaluacion._id}
-            p={4}
-            mt={6}
-            borderWidth={1}
-            borderRadius="md"
-            shadow="md"
-          >
-            <Text fontSize="lg" fontWeight="bold">
-              {evaluacion.titulo}
-            </Text>
-            <Text>{evaluacion.descripcion}</Text>
-            <Button
-              mt={4}
-              onClick={() => {
-                setRetroalimentacion(null); // Reinicia la retroalimentación al seleccionar una nueva evaluación
-                setEvaluacionSeleccionada(evaluacion);
-              }}
+      </Heading>
+      {/* Listado de evaluaciones */}
+      <Stack spacing={6}>
+        {evaluacionesFiltradas.length > 0 ? (
+          evaluacionesFiltradas.map(evaluacion => (
+            <Box
+              key={evaluacion._id}
+              p={6}
+              borderWidth={1}
+              borderRadius="md"
+              bg="gray.50"
+              shadow="md"
+              _hover={{ bg: 'teal.50' }}
+              transition="background-color 0.2s"
             >
-              Responder
-            </Button>
-          </Box>
-        ))
-      ) : (
-        <Text mt={6}>No hay evaluaciones disponibles</Text>
-      )}
-
-      <Text fontSize="lg" fontWeight="bold" mb={2} mt={10} textAlign="center">
-        REALIZA TUS EVALUACIONES 📝
-      </Text>
+              <Heading as="h3" size="md" mb={2}>
+                {evaluacion.titulo}
+              </Heading>
+              <Text mb={4}>{evaluacion.descripcion}</Text>
+              <Badge colorScheme="teal" mb={4}>
+                Periodo: {evaluacion.periodo}
+              </Badge>
+              <Box mt={4}>
+                <Button
+                  colorScheme="teal"
+                  onClick={() => {
+                    setRetroalimentacion(null);
+                    setEvaluacionSeleccionada(evaluacion);
+                  }}
+                >
+                  Responder
+                </Button>
+              </Box>
+            </Box>
+          ))
+        ) : (
+          <Text mt={6} color="gray.500">
+            No hay evaluaciones disponibles
+          </Text>
+        )}
+      </Stack>
 
       {/* Formulario para responder la evaluación */}
       {evaluacionSeleccionada && !retroalimentacion && (
-        <Box p={4} mt={6} borderWidth={1} borderRadius="md" shadow="md">
-          <Text fontSize="lg" fontWeight="bold" mb={4}>
+        <Box
+          p={6}
+          mt={6}
+          borderWidth={1}
+          borderRadius="md"
+          bg="white"
+          shadow="lg"
+        >
+          <Heading as="h3" size="lg" mb={4} color="teal.500">
             Respondiendo: {evaluacionSeleccionada.titulo}
-          </Text>
+          </Heading>
           <form onSubmit={handleSubmit}>
             {evaluacionSeleccionada.preguntas.map(pregunta => (
-              <Box key={pregunta._id} mt={4}>
-                <Text>{pregunta.pregunta}</Text>
+              <Box
+                key={pregunta._id}
+                mt={4}
+                p={4}
+                borderWidth={1}
+                borderRadius="md"
+                bg="gray.50"
+              >
+                <Text fontSize="lg" fontWeight="bold" mb={2}>
+                  {pregunta.pregunta}
+                </Text>
                 <RadioGroup
+                
                   onChange={value => handleChangeRespuesta(pregunta._id, value)}
                 >
-                  <Stack direction="column">
+                  <Stack direction="column" spacing={2}>
                     {pregunta.opciones.map((opcion, index) => (
                       <Radio key={index} value={opcion.texto}>
                         {opcion.texto}
@@ -172,36 +199,10 @@ export const EvaluacionesEstudiante = () => {
                 </RadioGroup>
               </Box>
             ))}
-            <Button type="submit" colorScheme="teal" mt={4}>
+            <Button type="submit" colorScheme="teal" mt={6} width="full">
               Enviar Respuestas
             </Button>
           </form>
-        </Box>
-      )}
-
-      {/* Mostrar retroalimentación después de enviar */}
-      {retroalimentacion && (
-        <Box p={4} mt={6} borderWidth={1} borderRadius="md" shadow="md">
-          <Text fontSize="lg" fontWeight="bold" mb={4}>
-            Resultados de la Evaluación
-          </Text>
-          <Text>
-            Puntaje: {retroalimentacion.puntajeObtenido} /{' '}
-            {retroalimentacion.puntajeTotal}
-          </Text>
-          <Text>Porcentaje: {retroalimentacion.porcentaje.toFixed(2)}%</Text>
-          {retroalimentacion.retroalimentacion.map((item, index) => (
-            <Box key={index} mt={4}>
-              <Text fontWeight="bold">Pregunta: {item.pregunta}</Text>
-              <Text>
-                Tu respuesta: {item.respuestaEstudiante} -{' '}
-                {item.esCorrecta ? 'Correcta' : 'Incorrecta'}
-              </Text>
-              {!item.esCorrecta && (
-                <Text>Respuesta correcta: {item.respuestaCorrecta}</Text>
-              )}
-            </Box>
-          ))}
         </Box>
       )}
     </Box>

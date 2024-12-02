@@ -5,11 +5,12 @@ import {
   Heading,
   Button,
   VStack,
+  HStack,
   Icon,
   Image,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { RiBook2Fill, RiFileList2Line } from 'react-icons/ri';
+import { RiFileList2Line } from 'react-icons/ri';
 import { MdAssignmentTurnedIn } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -45,14 +46,9 @@ const InicioEstudiante = () => {
           ¡Continúa aprendiendo y alcanzando tus metas!
         </Text>
 
-        <Image
-          src="https://via.placeholder.com/300x150.png?text=Bienvenido+Estudiante"
-          alt="Bienvenido"
-          borderRadius="md"
-        />
-
-        <VStack spacing={4} width="100%">
-          <Link to="/ebr/estudiante/materiales" style={{ width: '100%' }}>
+        {/* Botones alineados uno al lado del otro */}
+        <HStack spacing={4} width="100%">
+          <Link to="/ebr/estudiante/materiales" style={{ width: '50%' }}>
             <Button
               leftIcon={<Icon as={RiFileList2Line} />}
               colorScheme="teal"
@@ -62,10 +58,9 @@ const InicioEstudiante = () => {
               Mis Materiales
             </Button>
           </Link>
-
           <Link
             to="/ebr/estudiante/evaluaciones-estudiante"
-            style={{ width: '100%' }}
+            style={{ width: '50%' }}
           >
             <Button
               leftIcon={<Icon as={MdAssignmentTurnedIn} />}
@@ -76,7 +71,14 @@ const InicioEstudiante = () => {
               Mis Evaluaciones
             </Button>
           </Link>
-        </VStack>
+        </HStack>
+
+        <Image
+          src="https://i.postimg.cc/5Npn04jG/education-students-happy-asian-woman-holding-notebooks-laughing-smiling-camera-enjoys-goi.jpg"
+          alt="Bienvenido"
+          borderRadius="md"
+          boxShadow="md"
+        />
 
         <Text fontSize="sm" color="gray.500" mt={4}>
           Recuerda revisar tu progreso y estar al tanto de nuevas actividades.

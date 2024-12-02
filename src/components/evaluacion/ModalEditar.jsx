@@ -30,13 +30,17 @@ import {
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 
-export const ModalEditar = ({ row }) => {
+export const ModalEditar = ({ row = { preguntas: [] } }) => {
   const dispatch = useDispatch();
-  const { grados } = useSelector(state => state.grados);
+  const { grados = [] } = useSelector(state => state.grados);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  const [formData, setFormData] = useState(row);
+  const [formData, setFormData] = useState({
+    ...row,
+    preguntas: Array.isArray(row?.preguntas) ? row.preguntas : [],
+  });
+
   const { titulo, descripcion, periodo, grado, preguntas } = formData;
 
   useEffect(() => {
@@ -51,6 +55,10 @@ export const ModalEditar = ({ row }) => {
   };
 
   const handlePreguntaChange = (index, value) => {
+    if (!Array.isArray(preguntas)) {
+      console.error('Preguntas no es un array');
+      return;
+    }
     const nuevasPreguntas = preguntas.map((pregunta, i) =>
       i === index ? { ...pregunta, texto: value } : pregunta
     );
@@ -58,8 +66,9 @@ export const ModalEditar = ({ row }) => {
   };
 
   const handleOpcionChange = (preguntaIndex, opcionIndex, value) => {
+    if (!Array.isArray(preguntas)) return;
     const nuevasPreguntas = preguntas.map((pregunta, i) =>
-      i === preguntaIndex
+      i === preguntaIndex && Array.isArray(pregunta.opciones)
         ? {
             ...pregunta,
             opciones: pregunta.opciones.map((opcion, j) =>
@@ -105,16 +114,17 @@ export const ModalEditar = ({ row }) => {
 
   const handleSubmit = () => {
     const preguntasVerificadas = formData.preguntas.map(pregunta => {
-      const opcionesVerificadas = pregunta.opciones.map(opcion => ({
-        texto: opcion.texto,
-        correcta: opcion.correcta || false,
-      }));
+      const opcionesVerificadas =
+        pregunta.opciones?.map(opcion => ({
+          texto: opcion?.texto || '',
+          correcta: opcion?.correcta || false,
+        })) || [];
 
       const respuestaCorrecta =
         opcionesVerificadas.find(opcion => opcion.correcta)?.texto || '';
 
       return {
-        pregunta: pregunta.texto,
+        pregunta: pregunta?.texto || '',
         opciones: opcionesVerificadas,
         respuestaCorrecta,
       };
@@ -198,7 +208,7 @@ export const ModalEditar = ({ row }) => {
               </FormControl>
 
               <VStack mt={4} spacing={4} align="start">
-                {preguntas.map((pregunta, i) => (
+                {preguntas?.map((pregunta, i) => (
                   <Box
                     key={i}
                     w="full"
@@ -225,8 +235,7 @@ export const ModalEditar = ({ row }) => {
                         colorScheme="red"
                       />
                     </HStack>
-
-                    {pregunta.opciones.map((opcion, j) => (
+                    {pregunta.opciones?.map((opcion, j) => (
                       <HStack key={j} mt={2} spacing={2}>
                         <Input
                           value={opcion.texto}
@@ -236,24 +245,12 @@ export const ModalEditar = ({ row }) => {
                           placeholder={`Opción ${j + 1}`}
                         />
                         <RadioGroup value={opcion.correcta ? 'true' : 'false'}>
-                          <Radio
-                            onChange={() => handleCorrectaChange(i, j)}
-                            value="true"
-                            colorScheme="green"
-                          >
+                          <Radio onChange={() => handleCorrectaChange(i, j)}>
                             Correcta
                           </Radio>
                         </RadioGroup>
                       </HStack>
                     ))}
-
-                    <Button
-                      mt={2}
-                      onClick={() => handleAddOpcion(i)}
-                      colorScheme="blue"
-                    >
-                      Agregar Opción
-                    </Button>
                   </Box>
                 ))}
               </VStack>

@@ -19,19 +19,19 @@ export default class GraficoBar extends PureComponent {
         ) {
             data = [
                 {
-                    name: 'ESTUDIANTES EBR',
+                    name: 'ESTUDIANTES JORNADA MAÑANA',
                     femeninos: reportesEBR.estudiantes[0].estudiantes_femeninos || 0,
                     masculinos: reportesEBR.estudiantes[0].estudiantes_masculinos || 0,
                     total: reportesEBR.estudiantes[0].total_estudiantes || 0,
                 },
                 {
-                    name: 'ESTUDIANTES CEBA',
+                    name: 'ESTUDIANTES TARDE',
                     femeninos: reportesCEBA.estudiantes[0].estudiantes_femeninos || 0,
                     masculinos: reportesCEBA.estudiantes[0].estudiantes_masculinos || 0,
                     total: reportesCEBA.estudiantes[0].total_estudiantes || 0,
                 },
                 {
-                    name: 'ESTUDIANTES RESIDENCIA',
+                    name: 'ESTUDIANTES ESPECIALIDAD',
                     femeninos: reportesRESIDENCIA.estudiantes[0].estudiantes_femeninos || 0,
                     masculinos: reportesRESIDENCIA.estudiantes[0].estudiantes_masculinos || 0,
                     total: reportesRESIDENCIA.estudiantes[0].total_estudiantes || 0,

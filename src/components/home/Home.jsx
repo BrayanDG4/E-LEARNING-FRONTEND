@@ -75,7 +75,7 @@ const Home = () => {
                 reportesRESIDENCIA={reportesRESIDENCIA}
               />
             </Box>
-            <Box
+            {/* <Box
               p={4}
               boxShadow={'base'}
               bg="white"
@@ -88,7 +88,7 @@ const Home = () => {
                 reportesCEBA={reportesCEBA}
                 reportesRESIDENCIA={reportesRESIDENCIA}
               />
-            </Box>
+            </Box> */}
             {/* <Box
               p={4}
               boxShadow={'base'}

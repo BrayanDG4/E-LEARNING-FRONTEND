@@ -63,7 +63,7 @@ const LoginPage = () => {
       } else if (ROLE === 'PROFESSOR_ROLE') {
         navigate('/ebr/profesor/materiales');
       } else if (ROLE === 'STUDENT_ROLE') {
-        navigate('/ebr/estudiante/materiales');
+        navigate('/inicio-estudiante');
       }
     }
 
@@ -213,17 +213,18 @@ const LoginPage = () => {
                 w="full"
                 fontSize={'sm'}
               >
-                <Checkbox
+                {/* <Checkbox
                   defaultChecked={!correoUsuario ? false : true}
                   value={checked}
                   onChange={e => setChecked(e.target.checked)}
                   isDisabled={correoUsuario ? true : false}
                 >
                   Recuerdame
-                </Checkbox>
+                </Checkbox> */}
+                <span> </span>
                 <Link
                   as={NavLink}
-                  to="#"
+                  to="/forgot-password"
                   color="messenger.600"
                   _hover={{ textDecoration: 'none' }}
                 >

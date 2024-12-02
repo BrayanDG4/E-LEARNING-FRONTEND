@@ -36,7 +36,6 @@ export const MaterialEstudiante = () => {
   const [periodoSeleccionado, setPeriodoSeleccionado] = useState('');
 
   useEffect(() => {
-    // Obtener todos los materiales
     dispatch(fetchMaterials());
   }, [dispatch]);
 
@@ -51,15 +50,15 @@ export const MaterialEstudiante = () => {
       setMateriales(updatedMaterials);
       actualizarProgreso(updatedMaterials);
 
-      // Extraer grados únicos usando Set para evitar duplicados
       const asignaturas = [
         ...new Set(
-          globalMateriales.materiales.map(material => material.grado.nombre)
+          globalMateriales.materiales
+            .filter(material => material.grado && material.grado.nombre)
+            .map(material => material.grado.nombre)
         ),
       ];
       setAsignaturasDisponibles(asignaturas);
 
-      // Extraer los periodos únicos
       const periodos = [
         ...new Set(
           globalMateriales.materiales.map(material => material?.periodo)
@@ -131,56 +130,63 @@ export const MaterialEstudiante = () => {
   }
 
   return (
-    <Box p={4}>
-      <Text fontSize="2xl" fontWeight="bold">
+    <Box p={6}>
+      <Text fontSize="2xl" fontWeight="bold" mb={4}>
         Progreso del Curso
       </Text>
-      <Progress value={progreso} size="lg" colorScheme="green" mt={4} />
-      <Text mt={2}>{progreso.toFixed(2)}% completado</Text>
+      <Progress value={progreso} size="lg" colorScheme="green" mb={4} />
+      <Text fontSize="lg" mb={4}>
+        {progreso.toFixed(2)}% completado
+      </Text>
 
-      <Select
-        placeholder="Selecciona una asignatura"
-        onChange={handleFiltroAsignatura}
-        mt={4}
-      >
-        {asignaturasDisponibles.length > 0 ? (
-          asignaturasDisponibles.map((asignatura, index) => (
-            <option key={index} value={asignatura}>
-              {asignatura}
-            </option>
-          ))
-        ) : (
-          <option>No hay asignaturas disponibles</option>
-        )}
-      </Select>
+      <HStack spacing={4} mb={6}>
+        <Select
+          placeholder="Selecciona una asignatura"
+          onChange={handleFiltroAsignatura}
+          bg="white"
+          shadow="sm"
+        >
+          {asignaturasDisponibles.length > 0 ? (
+            asignaturasDisponibles.map((asignatura, index) => (
+              <option key={index} value={asignatura}>
+                {asignatura}
+              </option>
+            ))
+          ) : (
+            <option>No hay asignaturas disponibles</option>
+          )}
+        </Select>
 
-      <Select
-        placeholder="Selecciona un periodo"
-        onChange={handleFiltroPeriodo}
-        mt={4}
-      >
-        {periodosDisponibles.length > 0 ? (
-          periodosDisponibles.map((periodo, index) => (
-            <option key={index} value={periodo}>
-              {periodo}
-            </option>
-          ))
-        ) : (
-          <option>No hay periodos disponibles</option>
-        )}
-      </Select>
+        <Select
+          placeholder="Selecciona un periodo"
+          onChange={handleFiltroPeriodo}
+          bg="white"
+          shadow="sm"
+        >
+          {periodosDisponibles.length > 0 ? (
+            periodosDisponibles.map((periodo, index) => (
+              <option key={index} value={periodo}>
+                {periodo}
+              </option>
+            ))
+          ) : (
+            <option>No hay periodos disponibles</option>
+          )}
+        </Select>
+      </HStack>
 
-      <Stack mt={6} spacing={4}>
+      <Stack spacing={6}>
         {materiales.length > 0 ? (
           materiales.map(material => (
             <Box
               key={material._id}
-              p={4}
-              shadow="md"
+              p={6}
+              shadow="lg"
               borderWidth="1px"
-              rounded="md"
+              rounded="lg"
+              bg="gray.50"
             >
-              <HStack justifyContent="space-between">
+              <HStack justifyContent="space-between" mb={2}>
                 <Text fontSize="lg" fontWeight="bold">
                   {material.titulo}
                 </Text>
@@ -191,19 +197,28 @@ export const MaterialEstudiante = () => {
                   onClick={() => toggleVisto(material._id)}
                 />
               </HStack>
-              <Text mt={2}>{material.descripcion}</Text>
+              <Text fontSize="md" mb={4}>
+                {material.descripcion}
+              </Text>
 
-              {material.tipo === 'PDF' && <FaFilePdf size={24} />}
-              {material.tipo === 'video' && <FaVideo size={24} />}
-              {material.tipo === 'enlace' && <FaLink size={24} />}
+              <HStack spacing={4}>
+                {material.tipo === 'PDF' && <FaFilePdf size={28} color="red" />}
+                {material.tipo === 'video' && (
+                  <FaVideo size={28} color="blue" />
+                )}
+                {material.tipo === 'enlace' && (
+                  <FaLink size={28} color="teal" />
+                )}
+              </HStack>
 
               {material.archivoUrl && (
                 <Button
-                  mt={2}
+                  mt={4}
                   colorScheme="teal"
                   as="a"
                   href={material.archivoUrl}
-                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Descargar
                 </Button>

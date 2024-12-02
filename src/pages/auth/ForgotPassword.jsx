@@ -68,9 +68,9 @@ const ForgotPasswordPage = () => {
             <Flex w="full" h="full">
                 <Box borderWidth={1} w="full" h="full" px={{ base : 8, lg: 10}} mr={2} bg="white" _dark={{ bg: 'primary.900'}} alignItems={'center'} justifyContent={'center'} borderRadius="lg" boxShadow={'base'}>
                     <Stack w="full" h="full" spacing={4} alignItems="center" justifyContent="center">
-                        <Image src="https://react-material.fusetheme.com/assets/images/logo/logo.svg" w={16} />
+                        <Image src="https://i.postimg.cc/hG6bxWFb/INELPE-LOGO.png" />
                         <Heading textAlign={'center'} fontSize="xl" fontWeight="bold" mt={2}>
-                            Sistema de Administración de una API
+                            Recuperar contraseña INELPE
                         </Heading>
                         <FormControl id="email">
                             <FormLabel mt={4}>Correo Electrónico</FormLabel>

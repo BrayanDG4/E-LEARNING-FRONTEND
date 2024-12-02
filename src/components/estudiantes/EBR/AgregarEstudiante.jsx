@@ -191,7 +191,7 @@ const AgregarEstudiante = () => {
             </Stack>
 
             <FormControl isRequired>
-              <FormLabel fontWeight={'semibold'}>GRADO</FormLabel>
+              <FormLabel fontWeight={'semibold'}>ASIGNATURA</FormLabel>
               <Select
                 placeholder="Selecciona una opción"
                 onChange={e => setIndice({ ...indice, grado: e.target.value })}
@@ -374,7 +374,7 @@ const AgregarEstudiante = () => {
                   COLEGIO DE PROCEDENCIA
                 </FormLabel>
                 <Input
-                  placeholder="Ejemplo: HP - ELITEBOOK 840"
+                  placeholder="ESCUELITA LA PAZ"
                   type="text"
                   onChange={e =>
                     setIndice({

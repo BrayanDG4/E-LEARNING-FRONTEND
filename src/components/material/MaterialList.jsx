@@ -60,9 +60,9 @@ export const MaterialList = () => {
         },
         {
             name: 'ASIGNATURA',
-            selector: row => row.grado.nombre,
+            selector: row => row.grado?.nombre || 'No asignado',
             sortable: true,
-            cellExport: row => row.grado.nombre,
+            cellExport: row => row.grado?.nombre || 'No asignado',
             resizable: true
         },
         {

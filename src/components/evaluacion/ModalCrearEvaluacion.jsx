@@ -41,24 +41,24 @@ export const ModalCrearEvaluacion = () => {
         preguntas: []
     });
 
-    const { titulo, descripcion, periodo, grado, preguntas } = formData;
+    const { titulo, descripcion, periodo, grado, preguntas = [] } = formData;
 
     useEffect(() => {
         dispatch(getGrados());
     }, [dispatch]);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
+        setFormData((prev) => ({
+            ...prev,
             [e.target.name]: e.target.value
-        });
+        }));
     };
 
     const handleAddPregunta = () => {
-        setFormData({
-            ...formData,
-            preguntas: [...preguntas, { texto: '', opciones: [{ texto: '', correcta: false }] }]
-        });
+        setFormData((prev) => ({
+            ...prev,
+            preguntas: [...(prev.preguntas || []), { texto: '', opciones: [{ texto: '', correcta: false }] }]
+        }));
     };
 
     const handleRemovePregunta = (index) => {
@@ -233,7 +233,7 @@ export const ModalCrearEvaluacion = () => {
                             </FormControl>
 
                             <VStack mt={4} spacing={4} align="start">
-                                {preguntas.map((pregunta, i) => (
+                                {preguntas?.map((pregunta, i) => (
                                     <Box key={i} w="full" p={4} border="1px solid" borderColor="gray.200" borderRadius="md">
                                         <HStack justify="space-between">
                                             <FormControl isRequired>

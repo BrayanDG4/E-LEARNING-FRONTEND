@@ -44,7 +44,6 @@ const IndexChartEBR = () => {
         <Tabs isFitted variant='enclosed-colored' colorScheme='blue'>
             <TabList>
                 <Tab _selected={{ color: 'white', bg: 'messenger.500' }}>ESTUDIANTES</Tab>
-                <Tab _selected={{ color: 'white', bg: 'messenger.500' }}>LIBROS / MAPAS</Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
